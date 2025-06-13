@@ -24,7 +24,7 @@ const unsigned char* winkFrames[] = {
 };
 
 const int frameCount = sizeof(winkFrames) / sizeof(winkFrames[0]);
-
+''
 void setup() {
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C); // 0x3C is the I2C address for most 0.96" SSD1306 OLEDs
   display.clearDisplay();
