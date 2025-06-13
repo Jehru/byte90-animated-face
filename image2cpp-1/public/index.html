@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image to CPP Converter</title>
+    <link rel="stylesheet" href="../src/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Image to CPP Converter</h1>
+    </header>
+    <main>
+      <section>
+        <h2>Upload Image</h2>
+        <input type="file" id="imageInput" accept="image/*" />
+        <input type="file" id="imageInput2" accept="image/*" />
+        <label for="frameCount">Frames:</label>
+        <input type="number" id="frameCount" value="10" min="2" max="60" />
+        <button id="convertButton">Convert</button>
+        <button id="ditherButton">Dither Blend</button>
+        <div style="margin-top: 10px">
+          <div>
+            <strong>Preview A:</strong>
+            <img
+              id="preview1"
+              style="
+                max-width: 64px;
+                max-height: 64px;
+                border: 1px solid #ccc;
+                margin-right: 8px;
+              "
+            />
+            <img
+              id="preview2"
+              style="max-width: 64px; max-height: 64px; border: 1px solid #ccc"
+            />
+          </div>
+          <div style="margin-top: 10px">
+            <strong>Animation Preview:</strong>
+            <canvas
+              id="animPreview"
+              width="64"
+              height="64"
+              style="border: 1px solid #ccc; vertical-align: middle"
+            ></canvas>
+          </div>
+        </div>
+      </section>
+      <section id="outputSection" style="display: none">
+        <h2>Output</h2>
+        <pre id="output"></pre>
+      </section>
+    </main>
+    <footer>
+      <!-- <p>&copy; 2023 Image to CPP Converter</p> -->
+    </footer>
+    <script src="../src/app.js"></script>
+  </body>
+</html>
