@@ -1,10 +1,9 @@
 // remote_pet_face.ino
 // ------------------------------------------------------------------
-// Show a big “W” whenever the board is picked up (Δax ≤ THRESHOLD).
-// Otherwise loop a continuous blink animation. After the “W” holds on
-// screen for ~0.6 s the baseline is re‑calibrated so the new posture is
-// treated as neutral for the next event.
-// Serial prints ax, delta, and high‑level events for tuning.
+// When the board is picked up (Δax ≤ THRESHOLD) play one full **wink**
+// animation, then return to the normal blink loop. Baseline ax is re‑
+// calibrated after every wink so resting in the new posture won’t keep
+// retriggering. Serial prints ax, delta, and events for tuning.
 // ------------------------------------------------------------------
 
 #include <Wire.h>
@@ -13,7 +12,8 @@
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
 
-#include "blink.h"   // bitmaps blink_frame_00_delay_0 … _25
+#include "blink.h"   // blink_frame_00_delay_0 … _25
+#include "wink.h"    // wink_frame_00_delay_0 … _25
 
 // --------------------------- Display setup -------------------------
 #define SCREEN_WIDTH 128
@@ -23,10 +23,10 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 // --------------------------- IMU setup -----------------------------
 Adafruit_MPU6050 mpu;
-float baselineAx = 0.0f;                   // learned at start‑up or after “W”
+float baselineAx = 0.0f;                   // learned at start‑up or after wink
 const float PICKUP_THRESHOLD_NEG = -0.8f;  // m/s² relative drop ⇒ picked up
 
-// --------------------------- Frame table ---------------------------
+// --------------------------- Frame tables --------------------------
 const unsigned char *BLINK_FRAMES[] = {
   blink_frame_00_delay_0, blink_frame_01_delay_0, blink_frame_02_delay_0,
   blink_frame_03_delay_0, blink_frame_04_delay_0, blink_frame_05_delay_0,
@@ -40,11 +40,24 @@ const unsigned char *BLINK_FRAMES[] = {
 };
 const uint8_t BLINK_COUNT = sizeof(BLINK_FRAMES) / sizeof(BLINK_FRAMES[0]);
 
+const unsigned char *WINK_FRAMES[] = {
+  wink_frame_00_delay_0, wink_frame_01_delay_0, wink_frame_02_delay_0,
+  wink_frame_03_delay_0, wink_frame_04_delay_0, wink_frame_05_delay_0,
+  wink_frame_06_delay_0, wink_frame_07_delay_0, wink_frame_08_delay_0,
+  wink_frame_09_delay_0, wink_frame_10_delay_0, wink_frame_11_delay_0,
+  wink_frame_12_delay_0, wink_frame_13_delay_0, wink_frame_14_delay_0,
+  wink_frame_15_delay_0, wink_frame_16_delay_0, wink_frame_17_delay_0,
+  wink_frame_18_delay_0, wink_frame_19_delay_0, wink_frame_20_delay_0,
+  wink_frame_21_delay_0, wink_frame_22_delay_0, wink_frame_23_delay_0,
+  wink_frame_24_delay_0, wink_frame_25_delay_0
+};
+const uint8_t WINK_COUNT = sizeof(WINK_FRAMES) / sizeof(WINK_FRAMES[0]);
+
 // --------------------------- Prototypes ----------------------------
 void playAnimation(const unsigned char *frames[], uint8_t frameCount,
                    uint8_t loops, uint16_t frameDelay);
 void blinkAnimation();
-void showW();
+void showWink();
 bool pickupDetected();
 void calibrateBaseline();
 
@@ -82,11 +95,11 @@ void loop() {
 
   bool pickup = pickupDetected();
 
+  // Rising edge → play wink once
   if (pickup && !prevPickup) {
-    Serial.println("EVENT: PICK‑UP → show W");
-    showW();
-    delay(600);          // hold the W for visibility
-    calibrateBaseline(); // learn new neutral
+    Serial.println("EVENT: PICK‑UP → wink");
+    showWink();
+    calibrateBaseline();
     Serial.print("New baseline ax: ");
     Serial.println(baselineAx);
   } else if (!pickup) {
@@ -100,16 +113,18 @@ void loop() {
 // Animation helpers
 // ------------------------------------------------------------------
 void blinkAnimation() {
+    display.clearDisplay();
+
   playAnimation(BLINK_FRAMES, BLINK_COUNT, 1, 60);
+      display.clearDisplay();
+
 }
 
-void showW() {
-  display.clearDisplay();
-  display.setTextSize(5);             // fills most of 128×64
-  display.setTextColor(SSD1306_WHITE);
-  display.setCursor(0, 10);           // y‑offset to centre vertically-ish
-  display.print("W");
-  display.display();
+void showWink() {
+    display.clearDisplay();
+  playAnimation(WINK_FRAMES, WINK_COUNT, 1, 60);
+      display.clearDisplay();
+
 }
 
 void playAnimation(const unsigned char *frames[], uint8_t frameCount,
