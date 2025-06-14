@@ -1771,3 +1771,21 @@ const unsigned char* winkallArray[26] = {
 	winkframe_24_delay_0,
 	winkframe_25_delay_0
 };
+
+// ------- automatic table of all wink frames -------
+#define WINK_FRAME(X) extern const uint8_t winkframe_##X##_delay_0[] PROGMEM;
+#define WINK_FRAME_0n(n)  WINK_FRAME(0##n)
+#define WINK_FRAME_1n(n)  WINK_FRAME(1##n)
+#define WINK_FRAME_2n(n)  WINK_FRAME(2##n)
+
+WINK_FRAME_0n(0)  WINK_FRAME_0n(1)  WINK_FRAME_0n(2)  WINK_FRAME_0n(3)  WINK_FRAME_0n(4)
+WINK_FRAME_0n(5)  WINK_FRAME_0n(6)  WINK_FRAME_0n(7)  WINK_FRAME_0n(8)  WINK_FRAME_0n(9)
+WINK_FRAME_1n(0)  WINK_FRAME_1n(1)  WINK_FRAME_1n(2)  WINK_FRAME_1n(3)  WINK_FRAME_1n(4)
+WINK_FRAME_1n(5)  WINK_FRAME_1n(6)  WINK_FRAME_1n(7)  WINK_FRAME_1n(8)  WINK_FRAME_1n(9)
+WINK_FRAME_2n(0)  WINK_FRAME_2n(1)  WINK_FRAME_2n(2)  WINK_FRAME_2n(3)  WINK_FRAME_2n(4)
+WINK_FRAME_2n(5)
+
+#undef  WINK_FRAME
+#undef  WINK_FRAME_0n
+#undef  WINK_FRAME_1n
+#undef  WINK_FRAME_2n

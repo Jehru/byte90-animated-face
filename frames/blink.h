@@ -1744,3 +1744,18 @@ const unsigned char *epd_bitmap_allArray[26] = {
     epd_bitmap_frame_23_delay_0,
     epd_bitmap_frame_24_delay_0,
     epd_bitmap_frame_25_delay_0};
+
+    // ------- automatic table of all blink frames -------
+#define BLINK_FRAME(X) extern const uint8_t epd_bitmap_frame_##X##_delay_0[] PROGMEM;
+#define BLINK_0n(n)  BLINK_FRAME(0##n)
+#define BLINK_1n(n)  BLINK_FRAME(1##n)
+
+BLINK_0n(0)  BLINK_0n(1)  BLINK_0n(2)  BLINK_0n(3)  BLINK_0n(4)
+BLINK_0n(5)  BLINK_0n(6)  BLINK_0n(7)  BLINK_0n(8)  BLINK_0n(9)
+BLINK_1n(0)  BLINK_1n(1)  BLINK_1n(2)  BLINK_1n(3)  BLINK_1n(4)
+BLINK_1n(5)  BLINK_1n(6)  BLINK_1n(7)
+
+#undef  BLINK_FRAME
+#undef  BLINK_0n
+#undef  BLINK_1n
+
