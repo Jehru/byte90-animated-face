@@ -1,3 +1,6 @@
+#ifndef FRAMES_H
+#define FRAMES_H
+
 // 'frame_32_delay-0', 128x64px
 const unsigned char epd_bitmap_frame_32_delay_0[] PROGMEM = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -2615,3 +2618,4 @@ const unsigned char *epd_bitmap_allArray[39] = {
     epd_bitmap_frame_36_delay_0,
     epd_bitmap_frame_37_delay_0,
     epd_bitmap_frame_38_delay_0};
+#endif
